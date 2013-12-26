@@ -11,7 +11,7 @@ The [BrainSuite] (c) statistics toolbox allows the application of advanced stati
 Download
 ----
 
-https://bitbucket.org/shjoshi/curvematch
+Currently download from https://bitbucket.org/bmapdev/bst/
 
 Requirements (short version)
 -----------
