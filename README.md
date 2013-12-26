@@ -40,9 +40,9 @@ with the following packages:
     On Linux, for e.g. in the root directory of the R source, one can do:
 
     ```sh
-sudo ./configure  --enable-R-shlib 
-sudo make
-sudo make install
+sudo ./configure  --enable-R-shlib  
+sudo make  
+sudo make install  
     ```
 
 * [Rpy2] - python interface to R
