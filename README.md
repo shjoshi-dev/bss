@@ -90,7 +90,8 @@ to correspond to the paths on your file system.
 Then type,
 
 ```sh
-/Applications/Brainsuite13a/bstenv/bin/bst_model.py -modelspec ~/bmapdev-bst/bst/test/data/sample1/modelspec.ini -outdir ~/ -statsengine R
+/Applications/Brainsuite13a/bstenv/bin/bst_model.py -modelspec 
+~/bmapdev-bst/bst/test/data/sample1/modelspec.ini -outdir ~/ -statsengine R
 ```
 ---
 License
