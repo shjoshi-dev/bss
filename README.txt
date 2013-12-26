@@ -76,7 +76,22 @@ Install all the packages in virtualenv
 Install the bst package in virtualenv
 
 
+Example for running ANOVA for model comparison
+--------------
+The source package includes a test directory with sample data. Assuming the unzipped source directory is located at: ~/bmapdev-bst, open the file
+```sh
+~/bmapdev-bst/bst/test/data/sample1/modelspec.ini
+```
+and change the respective paths for the variables
+```sh
+subjectdir, demographics, phenotype_attribute_matrix, atlas_surface
+```
+to correspond to the paths on your file system. 
+Then type,
 
+```sh
+/Applications/Brainsuite13a/bstenv/bin/bst_model.py -modelspec ~/bmapdev-bst/bst/test/data/sample1/modelspec.ini -outdir ~/ -statsengine R
+```
 ---
 License
 ----
@@ -90,3 +105,4 @@ License
 [pandas]:http://pandas.pydata.org
 [R]:http://www.r-project.org
 [Rpy2]:http://rpy.sourceforge.net/rpy2.html
+    
