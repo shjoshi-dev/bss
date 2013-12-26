@@ -1,7 +1,7 @@
-[BrainSuite]&copy; 2013 Statistics Toolbox (bst)
+[BrainSuite] (c) 2013 Statistics Toolbox (bst)
 =========
 ---------
-The [BrainSuite]&copy;  statistics toolbox allows the application of advanced statistical models to surface and curve based outputs generated from BrainSuite. This enables population or group modeling of cortical or sulcal morphology. Some features of the toolbox are:
+The [BrainSuite] (c) statistics toolbox allows the application of advanced statistical models to surface and curve based outputs generated from BrainSuite. This enables population or group modeling of cortical or sulcal morphology. Some features of the toolbox are:
 
   - a python interface for manipulating morphological data using [R] through [Rpy2]
   - a python interface for using [statsmodels] with [pandas] for a pure python implementation
