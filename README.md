@@ -57,10 +57,11 @@ To be followed if all the requirements above are satisfied.
 
 It is recommended to create a virtual python environment in your BrainSuite directory.
 
-For e.g., if your BrainSuite installation is located at /Applications/Brainsuite13a, and the bst package is downloaded at ~/bst-0.1dev.tar.gz, then open the terminal and type
+For e.g., if your BrainSuite installation is located at /Applications/Brainsuite13a, and the
+unzipped bst package is located at ~/bst-0.1dev, then open the terminal and type
 ```sh
 virtualenv --system-site-packages /Applications/Brainsuite13a/bstenv
-/Applications/Brainsuite13a/bstenv/bin/pip install ~/bst-0.1dev.tar.gz
+/Applications/Brainsuite13a/bstenv/bin/python ~/bst-0.1dev/setup.py install
 ```
 
 Installation for Mac OSX/Linux  - Approach 2
