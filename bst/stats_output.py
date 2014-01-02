@@ -13,6 +13,7 @@ import numpy as np
 import os
 import dfsio
 import sys
+from stats_mult_comp import Stats_Multi_Comparisons
 
 
 class StatsOutput(object):
@@ -20,9 +21,14 @@ class StatsOutput(object):
     def __init__(self, dim=0):
         self.pvalues = np.zeros(dim)
         self.pvalues_signed = np.zeros(dim)
+        self.pvalues_adjusted = np.zeros(dim)
         self.tvalues = np.zeros(dim)
 
+    def adjust_for_multi_comparisons(self):
+            self.pvalues_adjusted = Stats_Multi_Comparisons.adjust(self.pvalues)
+
     def save(self, outdir, outprefix, atlas_filename):
+        self.adjust_for_multi_comparisons()
 
         s1 = dfsio.readdfs(atlas_filename)
 
@@ -31,6 +37,9 @@ class StatsOutput(object):
 
         if len(s1.attributes) == s1.vertices.shape[0]:
             dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_stats.dfs'), s1)
+            if len(self.pvalues_adjusted) > 0:
+                s1.attributes = self.pvalues_adjusted
+                dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_stats_pvalues_adjusted.dfs'), s1)
         else:
             sys.stdout.write('Error: Dimension mismatch between the p-values and the number of vertices. '
                              'Quitting without saving.\n')
