@@ -12,4 +12,5 @@ bst/modelspec.py
 bst/rmodels.py
 bst/stats_data.py
 bst/stats_engine.py
+bst/stats_mult_comp.py
 bst/stats_output.py
