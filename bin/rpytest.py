@@ -1,5 +1,5 @@
 import rpy2.robjects
-f = file("/Volumes/Users/sjoshi/research/tools/stats/bst/bst/test/data/fears/anova_shape_R.R")
+f = file("/Volumes/Users/sjoshi/research/tools/stats/bss/bss/test/data/fears/anova_shape_R.R")
 code = ''.join(f.readlines())
 print code
 print "\n"

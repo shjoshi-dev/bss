@@ -1,9 +1,9 @@
 package:
-  name: bst
+  name: bss
   version: 0.1
 
 source:
-  git_url: https://shjoshi@bitbucket.org/bmapdev/bst.git
+  git_url: https://shjoshi@bitbucket.org/bmapdev/bss.git
 #  patches:
    # List any patch files here
    # - fix.patch
@@ -25,5 +25,5 @@ test:
   imports:
 
 about:
-  home: https://bitbucket.org/bmapdev/bst
+  home: https://bitbucket.org/bmapdev/bss
   license: Lesser General Public License (LGPL) or BSD

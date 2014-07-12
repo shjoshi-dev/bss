@@ -7,4 +7,4 @@ __email__ = "s.joshi@ucla.edu"
 __credits__ = 'Contributions and ideas: Shantanu H. Joshi, Roger P. Woods, David Shattuck. ' \
               'Inspired by the stats package rshape by Roger P. Woods'
 
-__all__ = ['bst', 'modelspec']
+__all__ = ['bss', 'modelspec']

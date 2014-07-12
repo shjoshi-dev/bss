@@ -1,7 +1,7 @@
 #! /usr/local/epd/bin/python
 
 """
-Execute statistical modules in the package bst
+Execute statistical modules in the package bss
 """
 
 __author__ = "Shantanu H. Joshi"
@@ -15,9 +15,9 @@ __credits__ = 'Contributions and ideas: Shantanu H. Joshi, Roger P. Woods, David
 import argparse
 import time
 import logging
-from bst.modelspec import ModelSpec
-from bst.stats_data import StatsData
-from bst.stats_engine import StatsEngine
+from bss.modelspec import ModelSpec
+from bss.stats_data import StatsData
+from bss.stats_engine import StatsEngine
 import os
 
 
@@ -31,16 +31,16 @@ def main():
 
     args = parser.parse_args()
     t = time.time()
-    bst_model(args.modelspec, args.outdir, args.outprefix, args.statsengine)
+    bss_model(args.modelspec, args.outdir, args.outprefix, args.statsengine)
     elapsed = time.time() - t
     os.sys.stdout.write("Elapsed time " + str(elapsed) + " sec.")
 
 
-def bst_model(modelspec, outdir, outprefix, opt_statsengine):
+def bss_model(modelspec, outdir, outprefix, opt_statsengine):
 
     if not os.path.exists(outdir):
         os.mkdir(outdir)
-    logging.basicConfig(filename=os.path.join(outdir, 'bstat.log'), level=logging.DEBUG,
+    logging.basicConfig(filename=os.path.join(outdir, 'bss.log'), level=logging.DEBUG,
                         format='%(levelname)s:%(message)s', filemode='w')
     logging.info('Reading model file ' + modelspec)
     model = ModelSpec(modelspec)

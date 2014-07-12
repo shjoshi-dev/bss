@@ -9,14 +9,14 @@ __credits__ = 'Contributions and ideas: Shantanu H. Joshi, Roger P. Woods, David
 
 from distutils.core import setup
 # from setuptools import setup
-base_dir = 'bst'
+base_dir = 'bss'
 setup(
-    name='bst',
+    name='bss',
     version='0.1dev',
-    packages=['bst'],
-    package_dir={'bst': base_dir, },
+    packages=['bss'],
+    package_dir={'bss': base_dir, },
     test_suite='nose.collector',
-    scripts=['bin/bst_model.py', 'bin/paired_t_test_shape.py'],
+    scripts=['bin/bss_model.py', 'bin/paired_t_test_shape.py'],
     license='MIT/TBD',
     exclude_package_data={'': ['.gitignore', '.idea']},
     author='Shantanu H. Joshi, David Shattuck',

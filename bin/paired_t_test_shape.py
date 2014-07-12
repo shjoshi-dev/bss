@@ -13,7 +13,7 @@ import sys
 import numpy as np
 import argparse
 import time
-from bst.stats_data import StatsData
+from bss.stats_data import StatsData
 from scipy.stats import ttest_rel
 
 
