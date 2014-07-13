@@ -1,4 +1,4 @@
-[BrainSuite] (c) 2013 Statistics Toolbox (bst)
+[BrainSuite] (c) 2013 Statistics Toolbox (bss)
 =========
 ---------
 The [BrainSuite] (c) statistics toolbox allows the application of advanced statistical models to surface and curve based outputs generated from BrainSuite. This enables population or group modeling of cortical or sulcal morphology. Some features of the toolbox are:
@@ -11,7 +11,7 @@ The [BrainSuite] (c) statistics toolbox allows the application of advanced stati
 Download
 ----
 
-Currently download from https://bitbucket.org/bmapdev/bst/
+Currently download from https://bitbucket.org/bmapdev/bss/
 
 Requirements (short version)
 -----------
@@ -58,10 +58,10 @@ To be followed if all the requirements above are satisfied.
 It is recommended to create a virtual python environment in your BrainSuite directory.
 
 For e.g., if your BrainSuite installation is located at /Applications/Brainsuite13a, and the
-unzipped bst package is located at ~/bst-0.1dev, then open the terminal and type
+unzipped bss package is located at ~/bss-0.1dev, then open the terminal and type
 ```sh
-virtualenv --system-site-packages /Applications/Brainsuite13a/bstenv
-/Applications/Brainsuite13a/bstenv/bin/python ~/bst-0.1dev/setup.py install
+virtualenv --system-site-packages /Applications/Brainsuite13a/bssenv
+/Applications/Brainsuite13a/bssenv/bin/python ~/bss-0.1dev/setup.py install
 ```
 
 Installation for Mac OSX/Linux  - Approach 2
@@ -74,14 +74,14 @@ Create a virtualenv in the BrainSuite directory
 
 Install all the packages in virtualenv
 
-Install the bst package in virtualenv
+Install the bss package in virtualenv
 
 
 Example for running ANOVA for model comparison
 --------------
-The source package includes a test directory with sample data. Assuming the unzipped source directory is located at: ~/bmapdev-bst, open the file
+The source package includes a test directory with sample data. Assuming the unzipped source directory is located at: ~/bmapdev-bss, open the file
 ```sh
-~/bmapdev-bst/bst/test/data/sample1/modelspec.ini
+~/bmapdev-bss/bss/test/data/sample1/modelspec.ini
 ```
 and change the respective paths for the variables
 ```sh
@@ -91,8 +91,8 @@ to correspond to the paths on your file system.
 Then type,
 
 ```sh
-/Applications/Brainsuite13a/bstenv/bin/bst_model.py -modelspec 
-~/bmapdev-bst/bst/test/data/sample1/modelspec.ini -outdir ~/ -statsengine R
+/Applications/Brainsuite13a/bssenv/bin/bss_model.py -modelspec 
+~/bmapdev-bss/bss/test/data/sample1/modelspec.ini -outdir ~/ -statsengine R
 ```
 ---
 License
