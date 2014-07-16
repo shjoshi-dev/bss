@@ -49,24 +49,6 @@ echo -n "Installing anaconda python..."
 ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh -b -f -p ${install_dir} 1> ${install_dir}/tmp/install.log
 echo "Done."
    
-R_data_table_package="data.table"
-echo "'${R_data_table_package}' %in% rownames(installed.packages())" | R --quiet --no-save | grep -q "TRUE" #this will have exit code zero if package is installed
-package_is_installed=$?
-if [ $package_is_installed == 0 ]; then
-    echo -e "\nGood, R package ${R_data_table_package} is already installed.\n"
-else
-	#Create a library path
-    R_lib_path=${install_dir}/Rlibs
-    mkdir $R_lib_path
-    echo -e "\nR package ${R_data_table_package} is not installed, installing it now in ${R_lib_path}...\n"
-    #install packages
-    echo "install.packages('${R_data_table_package}', repos='http://cran.us.r-project.org', lib='${R_lib_path}')" | R --quiet --no-save 1>> ${install_dir}/tmp/install.log
-    message_if_failed "ERROR: failed to install data.table package for R. Exitting..."
-    #Create a .Rprofile in user's HOME to make sure R can find this library.
-    echo -e ".libPaths( c( .libPaths(), '${R_lib_path}'))" >> "${HOME}/.Rprofile"
-    message_if_failed "\nWARNING: Was not able to create a .Rprofile that would add ${R_lib_path} to the R's .libPaths()"
-fi
-
 ${install_dir}/bin/conda install pip -q --yes 1>> ${install_dir}/tmp/install.log
 
 echo -n "Installing rpy2...This may take a few minutes..."
@@ -89,11 +71,6 @@ fi
 echo -n "Installing statsmodels...This may take a few minutes..."
 ${install_dir}/bin/conda install statsmodels -q --yes 1>> ${install_dir}/tmp/install.log
 echo "Done."
-
-echo "R_LIBS=${R_lib_path}:$R_LIBS; export R_LIBS" >> ~/.bashrc
-echo "R_LIBS=${R_lib_path}:$R_LIBS; export R_LIBS" >> ~/.bash_profile
-echo "setenv R_LIBS ${R_lib_path}:$R_LIBS" >> ~/.tcshrc
-source ~/.bashrc
 
 # The following line is only to suppress the openpyxl warning in pandas. Will be removed in future installations.
 ${install_dir}/bin/conda install -q --yes openpyxl=1.8 >> ${install_dir}/tmp/install.log
