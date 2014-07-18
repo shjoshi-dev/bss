@@ -39,7 +39,7 @@ else
 fi;
 
 echo "This will install the BrainSuite Statistics toolbox. "
-echo "This will also install a mini version of anaconda python, rpy2, statsmodels and R data.table."
+echo "This will also install a mini version of anaconda python, rpy2, and statsmodels."
 VER=3.5.5
 echo "Downloading anaconda python...This may take a few minutes..."
 curl -o ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh http://repo.continuum.io/miniconda/Miniconda-${VER}-${platform}-x86_64.sh
@@ -78,7 +78,9 @@ ${install_dir}/bin/conda install -q --yes openpyxl=1.8 >> ${install_dir}/tmp/ins
 echo -n "Installing BrainSuite statistical toolbox...This may take a few minutes..."
 ${install_dir}/bin/conda install --yes -c https://conda.binstar.org/shjoshi bss
 echo "Done."
-echo "BrainSuite statistical toolbox was installed successfully"
+printf "BrainSuite statistical toolbox was installed successfully.\n"
+printf "Cleaning up temporary files..."
 rm -r ${install_dir}/pkgs/
 rm -r ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh
+printf "Done."
 exit 0
