@@ -23,6 +23,7 @@ class StatsOutput(object):
         self.pvalues_signed = np.zeros(dim)
         self.pvalues_adjusted = np.zeros(dim)
         self.tvalues = np.zeros(dim)
+        self.corrvalues = []
 
     def adjust_for_multi_comparisons(self):
             self.pvalues_adjusted = Stats_Multi_Comparisons.adjust(self.pvalues)
@@ -33,13 +34,20 @@ class StatsOutput(object):
         s1 = dfsio.readdfs(atlas_filename)
 
         s1.attributes = self.pvalues
-        print s1.attributes
+        # print s1.attributes
 
         if len(s1.attributes) == s1.vertices.shape[0]:
-            dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_stats.dfs'), s1)
+            dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_pvalues.dfs'), s1)
             if len(self.pvalues_adjusted) > 0:
                 s1.attributes = self.pvalues_adjusted
-                dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_stats_pvalues_adjusted.dfs'), s1)
+                dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_pvalues_adjusted.dfs'), s1)
         else:
             sys.stdout.write('Error: Dimension mismatch between the p-values and the number of vertices. '
                              'Quitting without saving.\n')
+
+        if len(self.corrvalues) > 0:
+            s1.attributes = self.corrvalues
+            dfsio.writedfs(os.path.join(outdir, outprefix + '_corr.dfs'), s1)
+            self.corrvalues[np.abs(self.pvalues_adjusted) > 0.05] = 0
+            s1.attributes = self.corrvalues
+            dfsio.writedfs(os.path.join(outdir, outprefix + '_corr_adjusted.dfs'), s1)
