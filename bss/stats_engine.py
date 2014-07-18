@@ -11,6 +11,10 @@ __credits__ = 'Contributions and ideas: Shantanu H. Joshi, Roger P. Woods, David
 
 from anova_shape_sm import anova_shape_sm
 from anova_shape_r import anova_shape_r
+from anova_shape_r import anova_shape_r_block
+from corr_r import corr_shape_r_block
+from corr_r import corr_shape_r
+import sys
 
 
 class StatsEngine(object):
@@ -27,8 +31,12 @@ class StatsEngine(object):
         if self.engine == 'sm':
             self.commands = {'anova': anova_shape_sm, }
         elif self.engine == 'R':
-            self.commands = {'anova': anova_shape_r, }
+            self.commands = {'anova': anova_shape_r_block,
+                             'corr': corr_shape_r,
+                             }
 
     def run(self):
+        sys.stdout.write('Running the statistical model. This may take a while...')
         stats_out = self.commands[self.model.stat_test](self.model, self.stats_data)
+        sys.stdout.write('Done.\n')
         return stats_out
