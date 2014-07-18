@@ -22,7 +22,7 @@ import sys
 
 class StatsData(object):
 
-    def __init__(self, demographics_file, model):
+    def __init__(self, demographics_file, model, max_block_size=2000):
         self.demographic_data = ''
         self.dataframe = None
         self.phenotype_files = []
@@ -31,34 +31,68 @@ class StatsData(object):
         self.surface_average = None
         self.phenotype_dataframe = None
         # self.attribue_matrix = None
+        self.phenotype_array = []
+        self.demographic_data = self.read_demographics(demographics_file)
+        self.data_read_flag = False
+        self.max_block_size = max_block_size
 
-        self.read_demographics(demographics_file)
+        # if not model.phenotype_attribute_matrix_file and not model.phenotype:
+        #     sys.stdout.write('Error: Phenotype is not set. Data frame will not be created.')
+        #     return
 
-        if not model.phenotype_attribute_matrix_file and not model.phenotype:
-            sys.stdout.write('Error: Phenotype is not set. Data frame will not be created.')
+        # # Choose the phenotype_attribute_matrix binary data if phenotype is also set
+        # if model.phenotype_attribute_matrix_file and model.phenotype:
+        #     self.read_subject_phenotype_attribute_matrix(model)
+        #     self.create_data_frame(model)
+        #     return
+
+        # if model.phenotype:
+        #     self.read_subject_phenotype(model)
+
+        s1_atlas = dfsio.readdfs(model.atlas_surface)
+        self.phenotype_array = self.read_aggregated_attributes_from_surfacefilelist(self.demographic_data[model.fileid],
+
+                                                                                    s1_atlas.vertices.shape[0])
+
+        if len(self.phenotype_array) == 0:
+            self.data_read_flag = False
+        else:
+            self.data_read_flag = True
+            # self.create_data_frame(model)
+
+            self.blocks_idx = []
+            # At this point the data is completely read, so create indices of blocks
+            if self.phenotype_array.shape[1] > self.max_block_size:
+                quotient, remainder = divmod(self.phenotype_array.shape[1], self.max_block_size)
+                for i in np.arange(quotient)+1:
+                    self.blocks_idx.append(((i-1)*self.max_block_size, (i-1)*self.max_block_size + self.max_block_size))
+                if remainder != 0:
+                    i = quotient + 1
+                    self.blocks_idx.append(((i-1)*self.max_block_size, (i-1)*self.max_block_size + remainder))
+            else:
+                self.blocks_idx.append((0, self.phenotype_array.shape[1]))
             return
 
-        # Choose the phenotype_attribute_matrix binary data if phenotype is also set
-        if model.phenotype_attribute_matrix_file and model.phenotype:
-            self.read_subject_phenotype_attribute_matrix(model)
-            self.create_data_frame(model)
-            return
 
-        if model.phenotype:
-            self.read_subject_phenotype(model)
 
-        self.create_data_frame(model)
-
-    def read_demographics(self, demographics_file):
+    @classmethod
+    def read_demographics(cls, demographics_file):
         filename, ext = os.path.splitext(demographics_file)
         if ext == '.csv':
-            self.demographic_data = pandas.read_csv(demographics_file)
+            demographic_data = pandas.read_csv(demographics_file)
         elif ext == '.txt':
-            self.demographic_data = pandas.read_table(demographics_file)
+            demographic_data = pandas.read_table(demographics_file)
+        return demographic_data
 
     def validate_data(self):
         #TODO routines for validating self.demographic_data
         pass
+
+    def read_subject_file(self, model):
+        for filename in self.demographic_data[model.fileid]:
+            self.phenotype_files.append(filename)
+        s1, s1_average, self.phenotype_array = self.read_aggregated_attributes_from_surfacefilelist(self.phenotype_files)
+        return
 
     def read_subject_phenotype(self, model):
         for subjectid in self.demographic_data[model.subjectid]:
@@ -78,14 +112,16 @@ class StatsData(object):
 
     def create_data_frame(self, model):
         for i in model.variables:
-            if i in model.factors:
-                self.pre_data_frame[i] = self.demographic_data[i]
-            else:
-                # Use either one of Int, Str, or Float vectors
-                if self.demographic_data[i][0].dtype.type in (np.int32, np.int64):
-                    self.pre_data_frame[i] = self.demographic_data[i]
-                elif self.demographic_data[i][0].dtype.type in (np.float32, np.float64): #TODO check this
-                    self.pre_data_frame[i] = self.demographic_data[i]
+            self.pre_data_frame[i] = self.demographic_data[i]
+
+            # if i in model.factors:
+            #     self.pre_data_frame[i] = self.demographic_data[i]
+            # else:
+            #     # Use either one of Int, Str, or Float vectors
+            #     if self.demographic_data[i][0].dtype.type in (np.int32, np.int64):
+            #         self.pre_data_frame[i] = self.demographic_data[i]
+            #     elif self.demographic_data[i][0].dtype.type in (np.float32, np.float64): #TODO check this
+            #         self.pre_data_frame[i] = self.demographic_data[i]
         # Create the phenotype array data frame
         # Create the column names for vertices automatically
         colnames = []
@@ -100,6 +136,51 @@ class StatsData(object):
         tot_dataframe = pandas.melt(tot_dataframe, id_vars=self.demographic_data.columns)
         self.phenotype_dataframe = tot_dataframe
         return
+
+    def get_data_frame_block(self, model, block_num):
+        for i in model.variables:
+            if i in model.factors:
+                self.pre_data_frame[i] = self.demographic_data[i]
+            else:
+                # Use either one of Int, Str, or Float vectors
+                if self.demographic_data[i][0].dtype.type in (np.int32, np.int64):
+                    self.pre_data_frame[i] = self.demographic_data[i]
+                elif self.demographic_data[i][0].dtype.type in (np.float32, np.float64): #TODO check this
+                    self.pre_data_frame[i] = self.demographic_data[i]
+        # Create the phenotype array data frame
+        # Create the column names for vertices automatically
+        colnames = []
+
+        for i in range(self.blocks_idx[block_num][0], self.blocks_idx[block_num][1]):
+            colnames.append('V'+str(i))
+
+        temp_frame = pandas.DataFrame(self.phenotype_array[:, range(self.blocks_idx[block_num][0], self.blocks_idx[block_num][1])])
+        temp_frame.columns = colnames
+        temp_frame[model.subjectid] = self.demographic_data[model.subjectid]
+
+        tot_dataframe = pandas.merge(self.demographic_data, temp_frame)
+        tot_dataframe = pandas.melt(tot_dataframe, id_vars=self.demographic_data.columns)
+        return tot_dataframe
+
+    def convert_pandas_to_r_data_frame(self, model, dataframe):
+        pre_data_frame = {}
+        for i in dataframe.columns:
+            if i in model.factors:
+                pre_data_frame[i] = robjects.FactorVector(dataframe[i])
+            else:
+                # Use either one of Int, Str, or Float vectors
+                if dataframe[i].dtype.type in (np.int32, np.int64):
+                    pre_data_frame[i] = robjects.IntVector(dataframe[i])
+                elif dataframe[i].dtype.type in (np.float32, np.float64):
+                    pre_data_frame[i] = robjects.FloatVector(dataframe[i])
+                else:
+                    pre_data_frame[i] = robjects.FactorVector(dataframe[i])
+
+        return robjects.DataFrame(pre_data_frame)
+
+    def get_r_data_frame_block(self, model, block_num):
+        df = self.get_data_frame_block(model, block_num)
+        return self.convert_pandas_to_r_data_frame(model, df)
 
     def get_r_pre_data_frame(self, model):
         pre_data_frame = {}
@@ -132,38 +213,18 @@ class StatsData(object):
         return pre_data_frame
 
     @staticmethod
-    def read_aggregated_attributes_from_surfacefilelist(surfacefilelist):
-
-        # Read first file
-        s1 = dfsio.readdfs(surfacefilelist[0])
-        # s1 = Surface()
-        # s1.read(surfacefilelist[0])
-        attributes_new = s1.attributes
-
-        num_files = len(surfacefilelist)
-        attrib_size = len(attributes_new)
-
-        attribute1_array = np.empty((num_files, attrib_size), 'float')
-        attribute1_array[0, :] = attributes_new
-
-        average_coords = s1.coords
-
-        for i in range(1, len(surfacefilelist)):
-            s1.read(surfacefilelist[i])
-            average_coords += s1.coords
-            if len(s1.attributes) != attrib_size:
+    def read_aggregated_attributes_from_surfacefilelist(surfacefilelist, attrib_siz):
+        attribute_array = np.empty((len(surfacefilelist), attrib_siz), 'float')
+        for i in range(0, len(surfacefilelist)):
+            attributes = dfsio.readdfsattributes(surfacefilelist[i])
+            if len(attributes) != attrib_siz:
                 sys.stdout.write("Length of attributes in Files " + surfacefilelist[i] + " and " + surfacefilelist[0]
                                  + " do not match. Quitting.\n")
-                attribute1_array = []
-                return attribute1_array
+                attribute_array = []
+                return attribute_array
             else:
-                attribute1_array[i, :] = s1.attributes
-
-        average_coords /= len(surfacefilelist)
-        s1_average = s1
-        s1_average.coords = average_coords
-
-        return s1, s1_average, attribute1_array
+                attribute_array[i, :] = attributes
+        return attribute_array
 
     @staticmethod
     def read_aggregated_attributes_from_surfaces(filename):
