@@ -68,6 +68,36 @@ def readdfs(fname):
     return (NFV)
 
 
+def readdfsattributes(fname):
+
+    class hdr:
+        pass
+
+    class NFV:
+        pass
+
+    fid = open(fname, 'rb')
+    hdr.ftype_header = np.array(struct.unpack('c' * 12, fid.read(12)), dtype='S1')
+    hdr.hdrsize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')  # size(int32) = 4 bytes
+    hdr.mdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.pdoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.nTriangles = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.nVertices = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.nStrips = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.stripSize = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.normals = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.uvStart = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.vcoffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.labelOffset = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    hdr.vertexAttributes = np.array(struct.unpack('i', fid.read(4)), dtype='int32')
+    attributes = []
+    if (hdr.vertexAttributes > 0):
+        fid.seek(hdr.vertexAttributes)
+        attributes = np.array(struct.unpack('f' * hdr.nVertices,fid.read(hdr.nVertices * 4)), dtype='float32')
+    fid.close()
+    return attributes
+
+
 def writedfs(fname,NFV):
     ftype_header = np.array(['D','F','S','_','L','E',' ','v','2','.','0','\x00']) #DFS_LEv2.0\0
     hdrsize = 184
