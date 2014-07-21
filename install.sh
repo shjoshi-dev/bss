@@ -20,6 +20,20 @@ if [ $# -ne 1 ]
     exit 0
 fi
 
+echo "This will install the BrainSuite Statistics toolbox. "
+echo "This will also install a mini version of anaconda python, rpy2, and statsmodels."
+VER=3.5.5
+R_data_table_package="data.table"
+echo "'${R_data_table_package}' %in% rownames(installed.packages())" | R --quiet --no-save | grep -q "TRUE" #this will have exit code zero if package is installed
+package_is_installed=$?
+if [ $package_is_installed == 0 ]; then
+    echo -e "\nGood, R package ${R_data_table_package} is already installed.\n"
+else
+    echo -e "\nR package ${R_data_table_package} is not installed. Please install data.table first then re-run the installation script.\n"
+    printf "\nExiting now.\n"
+    exit 0
+fi
+
 orig_dir=`pwd`
 install_dir=$1
 
@@ -38,9 +52,6 @@ else
 	platform="Linux"
 fi;
 
-echo "This will install the BrainSuite Statistics toolbox. "
-echo "This will also install a mini version of anaconda python, rpy2, and statsmodels."
-VER=3.5.5
 echo "Downloading anaconda python...This may take a few minutes..."
 curl -o ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh http://repo.continuum.io/miniconda/Miniconda-${VER}-${platform}-x86_64.sh
 chmod +x ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh
