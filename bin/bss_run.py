@@ -27,11 +27,12 @@ def main():
     parser.add_argument('modelspec', help='<txt file for model specification [ini]>')
     parser.add_argument('outdir', help='<output directory>')
     # parser.add_argument('-prefix', dest='outprefix', help='<output prefix>', required=False, default='left')
-    parser.add_argument('-statsengine', dest='statsengine', help='<statistical engine [R/sm]>',
-                        required=False, choices=['R', 'sm'], default='R')
-
+    # parser.add_argument('-statsengine', dest='statsengine', help='<statistical engine [R/sm]>',
+    #                     required=False, choices=['R', 'sm'], default='R')
     args = parser.parse_args()
+    args.statsengine = 'R'
     t = time.time()
+
     bss_run(args.modelspec, args.outdir, args.statsengine)
     elapsed = time.time() - t
     os.sys.stdout.write("Elapsed time " + str(elapsed) + " sec.")
