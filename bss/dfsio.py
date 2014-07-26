@@ -9,7 +9,8 @@ __email__ = "ayersb@ucla.edu"
 
 import numpy as np
 import struct
-
+import os
+import sys
 
 def readdfs(fname):
     class hdr:
@@ -17,6 +18,11 @@ def readdfs(fname):
 
     class NFV:
         pass
+
+    if not os.path.exists(fname):
+        sys.stdout.write('File name ' + fname + ' does not exist.\n')
+        NFV = None
+        return
 
     fid = open(fname, 'rb')
     hdr.ftype_header = np.array(struct.unpack('c' * 12, fid.read(12)), dtype='S1')
