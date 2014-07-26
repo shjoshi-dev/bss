@@ -54,7 +54,7 @@ def anova_shape_r_block(model, sdata):
     statsout = StatsOutput(dim=siz)
     pvalues = np.ones(siz)
 
-    stdout.write('Computing correlations for blocks...')
+    stdout.write('Computing regressions for blocks...')
     stdout.flush()
     for block_num, block_idx in enumerate(sdata.blocks_idx):
         stdout.write(str(block_num) + ', ')
