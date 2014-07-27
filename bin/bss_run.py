@@ -58,6 +58,8 @@ def bss_run(modelspec, outdir, opt_statsengine):
         logging.info('Done.')
 
         if statsdata.data_read_flag:
+            # Save the phenotype array to a ascii file for debugging
+            statsdata.write_subject_phenotype_array(os.path.join(outdir, 'phenotype_array.mat'))
             logging.info('Computing ' + model.modeltype + ' with ' + model.stat_test + '...')
             statsengine = StatsEngine(model, statsdata, engine=opt_statsengine)
             statsoutput = statsengine.run()
