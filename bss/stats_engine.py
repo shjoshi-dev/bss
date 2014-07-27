@@ -32,7 +32,7 @@ class StatsEngine(object):
             self.commands = {'anova': anova_shape_sm, }
         elif self.engine == 'R':
             self.commands = {'anova': anova_shape_r_block,
-                             'corr': corr_shape_r,
+                             'corr': corr_shape_r_block,
                              }
 
     def run(self):
