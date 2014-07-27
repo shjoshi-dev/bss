@@ -18,6 +18,7 @@ import numpy as np
 import rpy2.robjects as robjects
 import pandas
 import sys
+import scipy.io
 
 
 class StatsData(object):
@@ -51,7 +52,6 @@ class StatsData(object):
 
         s1_atlas = dfsio.readdfs(model.atlas_surface)
         self.phenotype_array = self.read_aggregated_attributes_from_surfacefilelist(self.demographic_data[model.fileid],
-
                                                                                     s1_atlas.vertices.shape[0])
 
         if len(self.phenotype_array) == 0:
@@ -109,6 +109,9 @@ class StatsData(object):
         arrayfloat.fromfile(fid, rows*cols)
         self.phenotype_array = np.frombuffer(arrayfloat, dtype=np.float32, offset=0).reshape(cols, rows, order='F')
         fid.close()
+
+    def write_subject_phenotype_array(self, filename):
+        scipy.io.savemat(filename, {'data_array': self.phenotype_array})
 
     def create_data_frame(self, model):
         for i in model.variables:
