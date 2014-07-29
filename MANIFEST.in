@@ -1,3 +1,4 @@
 include *.txt
 include *.md
+include MANIFEST.in
 recursive-include curvematch *.txt *.py *.pyx *.px[di]
