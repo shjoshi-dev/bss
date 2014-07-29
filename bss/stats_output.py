@@ -31,6 +31,7 @@ import os
 import dfsio
 import sys
 from stats_mult_comp import Stats_Multi_Comparisons
+import colormaps
 
 
 class StatsOutput(object):
@@ -54,9 +55,13 @@ class StatsOutput(object):
         # print s1.attributes
 
         if len(s1.attributes) == s1.vertices.shape[0]:
+            # Also write color to the field
+            s1.vColor = colormaps.Colormap.get_rgb_color_array('pvalue', s1.attributes)
             dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_pvalues.dfs'), s1)
             if len(self.pvalues_adjusted) > 0:
                 s1.attributes = self.pvalues_adjusted
+                # Also write color to the field
+                s1.vColor = colormaps.Colormap.get_rgb_color_array('pvalue', s1.attributes)
                 dfsio.writedfs(os.path.join(outdir, outprefix + '_atlas_pvalues_adjusted.dfs'), s1)
         else:
             sys.stdout.write('Error: Dimension mismatch between the p-values and the number of vertices. '
@@ -67,4 +72,6 @@ class StatsOutput(object):
             dfsio.writedfs(os.path.join(outdir, outprefix + '_corr.dfs'), s1)
             self.corrvalues[np.abs(self.pvalues_adjusted) > 0.05] = 0
             s1.attributes = self.corrvalues
+            # Also write color to the field
+            s1.vColor = colormaps.Colormap.get_rgb_color_array('corr', s1.attributes)
             dfsio.writedfs(os.path.join(outdir, outprefix + '_corr_adjusted.dfs'), s1)
