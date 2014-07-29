@@ -123,26 +123,45 @@ def bss_create_modelspec(modelspec_file):
             nullmodel = ' + '.join(covariates_list)
             test = 'anova'
 
+            sys.stdout.write('Saving the modelspec file + ' + modelspec_file + '...')
+            fid = open(modelspec_file, 'wt')
+            fid.write('[subjectinfo]\n')
+            fid.write('subjectid={0:s}\n'.format(subjid))
+            fid.write('demographics={0:s}\n'.format(demographics_csv))
+            fid.write('fileid={0:s}\n'.format(file_id))
+            fid.write('atlas={0:s}\n'.format(atlas))
+
+            fid.write('\n[measure]\n')
+            fid.write('modeltype={0:s}\n'.format(modeltype))
+            fid.write('fullmodel={0:s}\n'.format(fullmodel))
+            fid.write('nullmodel={0:s}\n'.format(nullmodel))
+            fid.write('test={0:s}\n'.format('anova'))
+            fid.close()
+            sys.stdout.write('Done.\n')
+
         elif modeltype == 'corr':
-            pass
+            while True:
+                variable = raw_input('Specify the variable (sex, age for e.g.) to correlate:').rstrip()
+                if variable in demographic_data.columns:
+                    break
+                else:
+                    sys.stdout.write('The variable name does not exist in ' + demographics_csv + '. Please re-enter.\n')
 
 
+            sys.stdout.write('Saving the modelspec file + ' + modelspec_file + '...')
+            fid = open(modelspec_file, 'wt')
+            fid.write('[subjectinfo]\n')
+            fid.write('subjectid={0:s}\n'.format(subjid))
+            fid.write('demographics={0:s}\n'.format(demographics_csv))
+            fid.write('fileid={0:s}\n'.format(file_id))
+            fid.write('atlas={0:s}\n'.format(atlas))
 
-        sys.stdout.write('Saving the modelspec file + ' + modelspec_file + '...')
-        fid = open(modelspec_file, 'wt')
-        fid.write('[subjectinfo]\n')
-        fid.write('subjectid={0:s}\n'.format(subjid))
-        fid.write('demographics={0:s}\n'.format(demographics_csv))
-        fid.write('fileid={0:s}\n'.format(file_id))
-        fid.write('atlas={0:s}\n'.format(atlas))
+            fid.write('\n[model]\n')
+            fid.write('coeff={0:s}\n'.format("corr"))
+            fid.write('variable={0:s}\n'.format(variable))
+            fid.close()
+            sys.stdout.write('Done.\n')
 
-        fid.write('\n[model]\n')
-        fid.write('modeltype={0:s}\n'.format(modeltype))
-        fid.write('fullmodel={0:s}\n'.format(fullmodel))
-        fid.write('nullmodel={0:s}\n'.format(nullmodel))
-        fid.write('test={0:s}\n'.format('anova'))
-        fid.close()
-        sys.stdout.write('Done.\n')
 
     except IOError as (errno, strerror):
         print "I/O error({0}): {1}".format(errno, strerror)
