@@ -131,7 +131,7 @@ def bss_create_modelspec(modelspec_file):
             fid.write('fileid={0:s}\n'.format(file_id))
             fid.write('atlas={0:s}\n'.format(atlas))
 
-            fid.write('\n[measure]\n')
+            fid.write('\n[model]\n')
             fid.write('modeltype={0:s}\n'.format(modeltype))
             fid.write('fullmodel={0:s}\n'.format(fullmodel))
             fid.write('nullmodel={0:s}\n'.format(nullmodel))
@@ -156,7 +156,7 @@ def bss_create_modelspec(modelspec_file):
             fid.write('fileid={0:s}\n'.format(file_id))
             fid.write('atlas={0:s}\n'.format(atlas))
 
-            fid.write('\n[model]\n')
+            fid.write('\n[measure]\n')
             fid.write('coeff={0:s}\n'.format("corr"))
             fid.write('variable={0:s}\n'.format(variable))
             fid.close()
