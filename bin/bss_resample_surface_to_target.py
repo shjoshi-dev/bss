@@ -37,18 +37,18 @@ from bss import dfsio
 def main():
     parser = argparse.ArgumentParser(description='This program resamples a surface to a target')
     parser.add_argument('src', help='source dfs surface')
-    parser.add_argument('src_reg', help='source dfs surface registered to atlas')
-    parser.add_argument('tgt', help='target dfs surface')
+    parser.add_argument('src_target', help='source dfs surface registered to atlas')
+    # parser.add_argument('tgt', help='target dfs surface')
     parser.add_argument('src_resamp_to_tgt', help='output resampled surface')
 
     args = parser.parse_args()
-    bss_resample_surface_to_target(args.src, args.src_reg, args.tgt, args.src_resamp_to_tgt)
+    bss_resample_surface_to_target(args.src, args.src_target, args.src_resamp_to_tgt)
 
 
-def bss_resample_surface_to_target(srcfile, src_regfile, tgtfile, resampfile):
+def bss_resample_surface_to_target(srcfile, src_regfile, resampfile):
 
     surf_src = dfsio.readdfs(srcfile)
-    surf_tgt = dfsio.readdfs(tgtfile)
+    # surf_tgt = dfsio.readdfs(tgtfile)
     surf_src_reg = dfsio.readdfs(src_regfile)
 
     surf_src.uv = np.c_[surf_src.u, surf_src.v]
@@ -63,7 +63,7 @@ def bss_resample_surface_to_target(srcfile, src_regfile, tgtfile, resampfile):
     res_z = griddata(surf_src.uv, surf_src.vertices[:, 2], surf_src_reg.uv, method='nearest')
     sys.stdout.write("Done.\n")
 
-    res_vertices = np.zeros((surf_tgt.vertices.shape[0], 3))
+    res_vertices = np.zeros((surf_src_reg.vertices.shape[0], 3))
     res_vertices[:, 0] = res_x
     res_vertices[:, 1] = res_y
     res_vertices[:, 2] = res_z
@@ -86,7 +86,7 @@ def bss_resample_surface_to_target(srcfile, src_regfile, tgtfile, resampfile):
         pass
 
     surf_resamp.vertices = res_vertices
-    surf_resamp.faces = surf_tgt.faces
+    surf_resamp.faces = surf_src_reg.faces
     surf_resamp.attributes = res_attributes
     surf_resamp.labels = res_labels
     dfsio.writedfs(resampfile, surf_resamp)
