@@ -38,7 +38,6 @@ def main():
     parser = argparse.ArgumentParser(description='This program resamples a surface to a target')
     parser.add_argument('src', help='source dfs surface')
     parser.add_argument('src_target', help='source dfs surface registered to atlas')
-    # parser.add_argument('tgt', help='target dfs surface')
     parser.add_argument('src_resamp_to_tgt', help='output resampled surface')
 
     args = parser.parse_args()
@@ -48,7 +47,6 @@ def main():
 def bss_resample_surface_to_target(srcfile, src_regfile, resampfile):
 
     surf_src = dfsio.readdfs(srcfile)
-    # surf_tgt = dfsio.readdfs(tgtfile)
     surf_src_reg = dfsio.readdfs(src_regfile)
 
     surf_src.uv = np.c_[surf_src.u, surf_src.v]
