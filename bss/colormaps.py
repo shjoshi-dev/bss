@@ -164,10 +164,22 @@ class Colormap:
         Colormap for correlation. Assumes correlations lie in |r| <= 1
         """
 
-        negmin = -np.min(np.abs(attributes[attributes < 0]))
-        negmax = -np.max(np.abs(attributes[attributes < 0]))
-        posmin = np.min(attributes[attributes > 0])
-        posmax = np.max(attributes[attributes > 0])
+        if attributes[attributes < 0]:
+            negmin = -np.min(np.abs(attributes[attributes < 0]))
+        else:
+            negmin = 0
+        if attributes[attributes < 0]:
+            negmax = -np.max(np.abs(attributes[attributes < 0]))
+        else:
+            negmax = 0
+        if attributes[attributes > 0]:
+            posmin = np.min(attributes[attributes > 0])
+        else:
+            posmin = 0
+        if attributes[attributes > 0]:
+            posmax = np.max(attributes[attributes > 0])
+        else:
+            posmax = 0
 
         neg_range = np.linspace(negmax, negmin, 5)
         pos_range = np.linspace(posmin, posmax, 5)
