@@ -67,14 +67,13 @@ def bss_run(modelspec, outdir, opt_statsengine):
         model = ModelSpec(modelspec)
         logging.info('Done.')
         if model.read_success == False:
-            sys.stdout.write('The modelspec file is incorrectly formatted. Perhaps it is missing some sections/fields.\n')
-            sys.exit()
+            # sys.stdout.write('The modelspec file is incorrectly formatted. Perhaps it is missing some sections/fields.\n')
+            return
 
         logging.info('Reading demographics file ' + model.demographics + ' and creating a data frame...')
         statsdata = StatsData(model.demographics, model)
-        logging.info('Done.')
-
         if statsdata.data_read_flag:
+            logging.info('Done.')
             # Save the phenotype array to a ascii file for debugging
             statsdata.write_subject_phenotype_array(os.path.join(outdir, 'phenotype_array.mat'))
             logging.info('Computing ' + model.modeltype + ' with ' + model.stat_test + '...')
