@@ -30,6 +30,9 @@ __credits__ = 'Contributions and ideas: Shantanu H. Joshi, Roger P. Woods, David
 import ConfigParser
 import re
 import sys
+from stats_data import StatsData
+import numpy as np
+
 
 class ModelSpec(object):
 
@@ -117,6 +120,12 @@ class ModelSpec(object):
             for i in re.split('\+', self.nullmodel):
                 set_null.add(i.rstrip().lstrip())
             self.unique = list(set_full - set_null)[0]  # TODO check: only one element should be present
+            demographic_data_temp = StatsData.read_demographics(self.demographics)
+            # If the unique variable (the main effect in regression) is not numeric show an error and return
+            if not demographic_data_temp[self.unique].dtype.type in (np.int, np.float, np.double):
+                sys.stdout.write('The variable for main effect "' + self.unique + '" is not numeric. Please recode as numeric and rerun.\n\n\n')
+                self.read_success = False
+                return
         elif self.measure_flag:
             # self.variables = set_full | set_null
             return
