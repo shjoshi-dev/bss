@@ -79,8 +79,13 @@ class Colormap:
         """
 
         negmin = -np.min(np.abs(attributes[attributes < 0]))
+        if np.abs(negmin) > 0.05:
+            negmin = -0.001
         negmax = -np.max(np.abs(attributes[attributes < 0]))
         posmin = np.min(attributes[attributes > 0])
+        if posmin > 0.05:
+            posmin = 0.001
+
         posmax = np.max(attributes[attributes > 0])
 
 
