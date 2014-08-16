@@ -42,6 +42,14 @@ fi
 
 echo "This will install the BrainSuite Statistics toolbox. "
 echo "This will also install a mini version of anaconda python, rpy2, and statsmodels."
+# Check if curl exists
+curl --help >> /dev/null
+curl_exists=$?
+if [${curl_exists} != 0]; then
+    printf "\nThe program curl is not installed. Please install curl and retry installing the toolbox.\n"
+    exit 0
+fi
+
 VER=3.5.5
 R_data_table_package="data.table"
 echo "'${R_data_table_package}' %in% rownames(installed.packages())" | R --quiet --no-save | grep -q "TRUE" #this will have exit code zero if package is installed
@@ -112,6 +120,9 @@ ${install_dir}/bin/conda install -q --yes openpyxl=1.8 >> ${install_dir}/tmp/ins
 echo -n "Installing BrainSuite statistical toolbox...This may take a few minutes..."
 ${install_dir}/bin/conda install --yes -c https://conda.binstar.org/shjoshi bss
 echo "Done."
+if [[ "$platform" == "Linux" ]]; then
+    ${install_dir}/bin/conda remove readline # This is a workaround for the "libreadline.so not found" error. Temporary fix.
+fi;
 printf "BrainSuite statistical toolbox was installed successfully.\n"
 printf "Cleaning up temporary files..."
 rm -r ${install_dir}/pkgs/
