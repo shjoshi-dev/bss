@@ -45,7 +45,7 @@ echo "This will also install a mini version of anaconda python, rpy2, and statsm
 # Check if curl exists
 curl --help >> /dev/null
 curl_exists=$?
-if [${curl_exists} != 0]; then
+if [ ${curl_exists} != 0 ]; then
     printf "\nThe program curl is not installed. Please install curl and retry installing the toolbox.\n"
     exit 0
 fi
@@ -121,11 +121,31 @@ echo -n "Installing BrainSuite statistical toolbox...This may take a few minutes
 ${install_dir}/bin/conda install --yes -c https://conda.binstar.org/shjoshi bss
 echo "Done."
 if [[ "$platform" == "Linux" ]]; then
-    ${install_dir}/bin/conda remove readline # This is a workaround for the "libreadline.so not found" error. Temporary fix.
+    ${install_dir}/bin/conda remove -q --yes readline >> ${install_dir}/tmp/install.log # This is a workaround for the "libreadline.so not found" error. Temporary fix.
 fi;
+
+if [[ "$platform" == "Linux" ]]; then
+    R_HOME=`R RHOME`
+    read -p "Would you like to modify your ~/.bashrc to include the LD_LIBRARY_PATH? [y/n] " yn
+    case $yn in
+        [Yy]* ) echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}" >> ~/.bashrc;
+            printf "Modified ~/.bashrc\n";;
+        [Nn]* )
+            printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
+            printf "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n";;
+        * )
+            printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
+            printf "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n";;
+    esac
+fi
+
 printf "BrainSuite statistical toolbox was installed successfully.\n"
 printf "Cleaning up temporary files..."
 rm -r ${install_dir}/pkgs/
 rm -r ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh
-printf "Done."
+printf "Done.\n\n"
+
+printf "To test, try running\n ${install_dir}/bin/bss_run.py -h \n"
+printf "It should display help and then exit.\n"
+
 exit 0
