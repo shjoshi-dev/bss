@@ -245,19 +245,11 @@ class Colormap:
     def get_rgb_from_attribute(self, value):
 
         value = float(value)
-        # if abs(value) < 0.05:
-        #     print "hi"
-        red_idx1 = np.where((self.attrib_range <= value) == True)[0][-1]
-        red_idx2 = np.where((self.attrib_range >= value) == True)[0][0]
-
-        green_idx1 = np.where((self.attrib_range <= value) == True)[0][-1]
-        green_idx2 = np.where((self.attrib_range >= value) == True)[0][0]
-
-        blue_idx1 = np.where((self.attrib_range <= value) == True)[0][-1]
-        blue_idx2 = np.where((self.attrib_range >= value) == True)[0][0]
-        red = (1.0 - value)*self.red_range[red_idx1] + value*self.red_range[red_idx2]
-        green = (1.0 - value)*self.green_range[green_idx1] + value*self.green_range[green_idx2]
-        blue = (1.0 - value)*self.blue_range[blue_idx1] + value*self.blue_range[blue_idx2]
+        idx1 = np.where((self.attrib_range <= value) == True)[0][-1]
+        idx2 = np.where((self.attrib_range >= value) == True)[0][0]
+        red = (1.0 - value)*self.red_range[idx1] + value*self.red_range[idx2]
+        green = (1.0 - value)*self.green_range[idx1] + value*self.green_range[idx2]
+        blue = (1.0 - value)*self.blue_range[idx1] + value*self.blue_range[idx2]
         return (red, green, blue)
 
     def get_rgb_list_from_attribute_list(self, attribute_list):
