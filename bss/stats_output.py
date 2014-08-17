@@ -47,6 +47,7 @@ class StatsOutput(object):
             self.pvalues_adjusted = Stats_Multi_Comparisons.adjust(self.pvalues)
 
     def save(self, outdir, outprefix, atlas_filename):
+        sys.stdout.write('Saving output files...\n')
         self.adjust_for_multi_comparisons()
 
         s1 = dfsio.readdfs(atlas_filename)
@@ -69,9 +70,11 @@ class StatsOutput(object):
 
         if len(self.corrvalues) > 0:
             s1.attributes = self.corrvalues
+            s1.vColor = colormaps.Colormap.get_rgb_color_array('corr', s1.attributes)
             dfsio.writedfs(os.path.join(outdir, outprefix + '_corr.dfs'), s1)
             self.corrvalues[np.abs(self.pvalues_adjusted) > 0.05] = 0
             s1.attributes = self.corrvalues
             # Also write color to the field
             s1.vColor = colormaps.Colormap.get_rgb_color_array('corr', s1.attributes)
             dfsio.writedfs(os.path.join(outdir, outprefix + '_corr_adjusted.dfs'), s1)
+        sys.stdout.write('Done.\n')
