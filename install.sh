@@ -21,8 +21,8 @@
 
 
 #
-#__author__ = "Shantanu H. Joshi, Garrett Reynolds"
-#__copyright__ = "Copyright 2014 Shantanu H. Joshi, Garrett Reynolds, David Shattuck, 
+#__author__ = "Shantanu H. Joshi, Garrett Reynolds, Jonathan Pierce"
+#__copyright__ = "Copyright 2014 Shantanu H. Joshi, Garrett Reynolds, Jonathan Pierce, David Shattuck,
 #				  Ahmanson Lovelace Brain Mapping Center, University of California Los Angeles"
 #__email__ = "sjoshi@bmap.ucla.edu"
 
@@ -124,11 +124,27 @@ if [[ "$platform" == "Linux" ]]; then
     ${install_dir}/bin/conda remove -q --yes readline >> ${install_dir}/tmp/install.log # This is a workaround for the "libreadline.so not found" error. Temporary fix.
 fi;
 
+if [[ ${install_dir} = /* ]];
+then
+    # Absolute path
+    install_bin_abs_path="${install_dir}/bin"
+else
+    # Relative path
+    install_bin_abs_path=$(echo $PWD/$(basename ${install_dir})"/bin")
+fi
+
+if [[ -f ~/.bashrc ]]
+then
+    printf "Making a backup of the ~/.bashrc to ~/.bashrc.BAK just in case\n"
+    cp ~/.bashrc ~/.bashrc.BAK
+fi
+
 if [[ "$platform" == "Linux" ]]; then
     R_HOME=`R RHOME`
-    read -p "Would you like to modify your ~/.bashrc to include the LD_LIBRARY_PATH? [y/n] " yn
+    read -p "Would you like to modify your ~/.bashrc to add to LD_LIBRARY_PATH? [y/n] " yn
     case $yn in
-        [Yy]* ) echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}" >> ~/.bashrc;
+        [Yy]* )
+            echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}" >> ~/.bashrc;
             printf "Modified ~/.bashrc\n";;
         [Nn]* )
             printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
@@ -137,7 +153,25 @@ if [[ "$platform" == "Linux" ]]; then
             printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
             printf "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n";;
     esac
+    echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n" 1>> ${install_dir}/tmp/install.log
 fi
+
+read -p "Would you like to modify your ~/.bashrc PATH to include paths to the installation directory? [y/n] " yn
+case $yn in
+    [Yy]* )
+            echo "export PATH=${install_bin_abs_path}:\${PATH}" >> ~/.bashrc;
+            printf "Modified ~/.bashrc to add the path ${install_bin_abs_path}\n";;
+    [Nn]* )
+            printf "~/.bashrc not modified. You may either have to set the PATH manually,\n";
+            printf "or run the commands from ${install_dir}/bin\n";
+            printf "export PATH=${install_bin_abs_path}:\${PATH}\n";;
+    * )
+            printf "~/.bashrc not modified. You may either have to set the PATH manually,\n";
+            printf "or run the commands from ${install_dir}/bin\n";
+            printf "export PATH=${install_bin_abs_path}:\${PATH}\n";;
+esac
+
+echo "export PATH=${install_bin_abs_path}:\${PATH}\n" 1>> ${install_dir}/tmp/install.log
 
 printf "BrainSuite statistical toolbox was installed successfully.\n"
 printf "Cleaning up temporary files..."
@@ -145,7 +179,12 @@ rm -r ${install_dir}/pkgs/
 rm -r ${install_dir}/tmp/Miniconda-${VER}-${platform}-x86_64.sh
 printf "Done.\n\n"
 
-printf "To test, try running\n ${install_dir}/bin/bss_run.py -h \n"
-printf "It should display help and then exit.\n"
+printf "To test...\n"
+printf "Run source ~/.bashrc if you modified your bashrc.\n"
+if [[ "$platform" == "Linux" ]]; then
+    printf "Or set the LD_LIBRARY_PATH manually as shown above.\n"
+fi
+printf "Try running\n ${install_dir}/bin/bss_run.py -h \n"
+printf "It should display help and then exit.\n\n\n"
 
 exit 0
