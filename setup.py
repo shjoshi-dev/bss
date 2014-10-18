@@ -34,7 +34,7 @@ setup(
     package_dir={'bss': base_dir, },
     test_suite='nose.collector',
     scripts=['bin/bss_run.py', 'bin/paired_t_test_shape.py', 'bin/bss_create_modelspec.py',
-             'bin/bss_resample_surface_to_target.py', 'bin/bss_fdr.py', 'bin/bss_config.py'],
+             'bin/bss_resample_surface_to_target.py', 'bin/bss_fdr.py', 'bin/bss_config.py', 'bin/bss_save_roi_mean.py'],
     license='MIT/TBD',
     exclude_package_data={'': ['.gitignore', '.idea']},
     author='Shantanu H. Joshi, David Shattuck',
