@@ -104,3 +104,38 @@ def corr_shape_r_block(model, sdata):
     statsout.corrvalues = corr_coeff
     statsout.file_name_string = '_corr_with_' + model.variable
     return statsout
+
+
+def corr_fast(model, sdata):
+    def fastColumnWiseCorrcoef(O, P): #P = age_mtx = 1 x n, O = subjects_vertices_mtx = n x m
+        n = P.size
+        DO = O - (np.einsum('ij->j',O) / np.double(n))
+        P -= (np.einsum('i->',P) / np.double(n))
+        tmp = np.einsum('ij,ij->j',DO,DO)
+        tmp *= np.einsum('i,i->',P,P)
+        return np.dot(P, DO) / np.sqrt(tmp)
+    def slowColumnWiseCorrcoef(O, P): #P = age_mtx = 1 x n, O = subjects_vertices_mtx = n x m
+        n = P.size
+        DO = O - (np.sum(O, 0) / np.double(n))
+        DP = P - (np.sum(P) / np.double(n))
+        return np.dot(DP, DO) / np.sqrt(np.sum(DO ** 2, 0) * np.sum(DP ** 2))
+
+    size = sdata.phenotype_array.shape[1]
+    statsout = StatsOutput(dim=size)
+    O = sdata.phenotype_array
+    P = np.array(sdata.demographic_data[model.variable])
+    #P = np.array([49,30,37,62,23,23,59,33,52,59,33,52,34,49,21,22,23,24,47,41,26,23,55,22,47,21,61,38,30,42,32,48,33,66,63,23,64,55,54,27,31,51,21,53,54,54,50,47,31,42,56,33,32,34,32,34,21,60,62,41,66,69,63,49,45,64,45,41,40,48,48,56,48,53,55,47,24,55,21,52,61,60,32,61,32,69,61,60,60])
+    #print P.shape
+    corr_coeff = slowColumnWiseCorrcoef(O, P)
+    statsout.pvalues = np.empty(size)
+    statsout.pvalues.fill(0.01)
+    statsout.pvalues = 1*np.random.random(size) - 0.5
+    statsout.corrvalues = corr_coeff
+    statsout.file_name_string = '_corr_with_' + model.variable
+    print "statsout.pvalues.shape = " + str(statsout.pvalues.shape)
+    print "statsout.corrvalues.shape = " + str(statsout.corrvalues.shape)
+    print statsout.pvalues
+    print statsout.corrvalues
+    #np.savetxt("corr_fast.csv", statsout.corrvalues, delimiter=",")
+
+    return statsout
