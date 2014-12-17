@@ -32,6 +32,7 @@ from anova_shape_r import anova_shape_r
 from anova_shape_r import anova_shape_r_block
 from corr_r import corr_shape_r_block
 from corr_r import corr_shape_r
+from corr_r import corr_fast
 import sys
 
 
@@ -50,7 +51,7 @@ class StatsEngine(object):
             self.commands = {'anova': anova_shape_sm, }
         elif self.engine == 'R':
             self.commands = {'anova': anova_shape_r_block,
-                             'corr': corr_shape_r_block,
+                             'corr': corr_fast,
                              }
 
     def run(self):
