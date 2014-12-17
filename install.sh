@@ -93,7 +93,7 @@ ${install_dir}/bin/conda install pip -q --yes 1>> ${install_dir}/tmp/install.log
 echo -n "Installing rpy2...This may take a few minutes..."
 if [[ "$platform" == "Linux" ]]; then
     echo "LD_LIBRARY_PATH is "$LD_LIBRARY_PATH | tee -a ${install_dir}/tmp/install.log
-    ${install_dir}/bin/pip install rpy2>> ${install_dir}/tmp/install.log
+    ${install_dir}/bin/pip install rpy2==2.4.2>> ${install_dir}/tmp/install.log
 	#${install_dir}/bin/conda install -c https://conda.binstar.org/r rpy2 --yes -q 1>> ${install_dir}/tmp/install.log
 elif [[ "$platform" == "MacOSX" ]]; then
     echo "DYLD_LIBRARY_PATH is "$DYLD_LIBRARY_PATH | tee -a ${install_dir}/tmp/install.log
