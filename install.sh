@@ -144,16 +144,16 @@ if [[ "$platform" == "Linux" ]]; then
     read -p "Would you like to modify your ~/.bashrc to add to LD_LIBRARY_PATH? [y/n] " yn
     case $yn in
         [Yy]* )
-            echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}" >> ~/.bashrc;
+            echo "export LD_LIBRARY_PATH=${R_HOME}/lib:\${LD_LIBRARY_PATH}" >> ~/.bashrc;
             printf "Modified ~/.bashrc\n";;
         [Nn]* )
             printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
-            printf "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n";;
+            printf "export LD_LIBRARY_PATH=\${R_HOME}/lib:\${LD_LIBRARY_PATH}\n";;
         * )
             printf "~/.bashrc not modified. You may have to set the LD_LIBRARY_PATH manually as\n";
-            printf "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n";;
+            printf "export LD_LIBRARY_PATH=\${R_HOME}/lib:\${LD_LIBRARY_PATH}\n";;
     esac
-    echo "export LD_LIBRARY_PATH=${R_HOME}/lib:${LD_LIBRARY_PATH}\n" 1>> ${install_dir}/tmp/install.log
+    echo "export LD_LIBRARY_PATH=\${R_HOME}/lib:\${LD_LIBRARY_PATH}\n" 1>> ${install_dir}/tmp/install.log
 fi
 
 read -p "Would you like to modify your ~/.bashrc PATH to include paths to the installation directory? [y/n] " yn
