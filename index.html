@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Bss : bss">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bss</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/shjoshi-dev/bss">View on GitHub</a>
+
+          <h1 id="project_title">Bss</h1>
+          <h2 id="project_tagline">bss</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/shjoshi-dev/bss/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/shjoshi-dev/bss/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="brainsuite-2013-statistics-toolbox-bss" class="anchor" href="#brainsuite-2013-statistics-toolbox-bss" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<a href="c">BrainSuite</a> 2013 Statistics Toolbox (bss)</h1>
+
+<hr>
+
+<p>The <a href="c">BrainSuite</a> statistics toolbox allows the application of advanced statistical models to surface and curve based outputs generated from BrainSuite. This enables population or group modeling of cortical or sulcal morphology. Some features of the toolbox are:</p>
+
+<ul>
+<li>a python interface for manipulating morphological data using <a href="http://www.r-project.org">R</a> through <a href="http://rpy.sourceforge.net/rpy2.html">Rpy2</a>
+</li>
+<li>a python interface for using <a href="http://statsmodels.sourceforge.net">statsmodels</a> with <a href="http://pandas.pydata.org">pandas</a> for a pure python implementation</li>
+<li>Ability to plot graphs, charts and visualizations on surfaces (coming soon)</li>
+</ul>
+
+<h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+
+<p>Currently download from <a href="https://bitbucket.org/bmapdev/bss/">https://bitbucket.org/bmapdev/bss/</a></p>
+
+<h2>
+<a id="requirements-short-version" class="anchor" href="#requirements-short-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements (short version)</h2>
+
+<ul>
+<li>
+<a href="http://www.r-project.org">R</a> - built as a library with –enable-R-shlib (Default on Windows and Mac OSX)</li>
+<li>
+<a href="http://www.python.org">Python</a> 2.7 </li>
+<li>Base Python packages - virtualenv, pip, numpy, scipy
+&gt; ##### <strong>NOTE:</strong> Alternately, install <a href="https://www.enthought.com/products/canopy/">Canopy</a> python. Makes life much easier.</li>
+<li>Add on Python packages - <a href="http://pandas.pydata.org">pandas</a>, <a href="http://statsmodels.sourceforge.net">statsmodels</a>, <a href="http://rpy.sourceforge.net/rpy2.html">rpy2</a>
+</li>
+</ul>
+
+<h2>
+<a id="requirements-long-version" class="anchor" href="#requirements-long-version" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements (long version)</h2>
+
+<p>To stick to a pure python execution, one could skip installing R, and Rpy2. However, in our benchmarks, Rpy2+R currently shows the best performance. </p>
+
+<p>Thus, to get all the functionality of the toolbox, it is recommended to install the following software on your computer.</p>
+
+<ul>
+<li>Working <a href="http://www.python.org">python</a> installation (We recommend version 2.7) -<br>
+with the following packages:
+
+<ul>
+<li>virtualenv, pip, numpy, scipy<br>
+</li>
+</ul>
+</li>
+</ul>
+
+<blockquote>
+<h5>
+<a id="note-alternately-you-could-download-canopy-express-a-comprehensive-python-framework-geared-towards-scientifc-computing-available-for-free" class="anchor" href="#note-alternately-you-could-download-canopy-express-a-comprehensive-python-framework-geared-towards-scientifc-computing-available-for-free" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<strong>NOTE:</strong> Alternately, you could download <a href="https://www.enthought.com/products/canopy/">Canopy</a> express, a comprehensive python framework geared towards scientifc computing, available for free.</h5>
+</blockquote>
+
+<ul>
+<li>
+<p><a href="http://www.r-project.org">R</a> - R software for statistical computing (built as a library with –enable-R-shlib)</p>
+
+<p>This is by default on Mac OSX and Windows. </p>
+
+<p>On Linux, for e.g. in the root directory of the R source, one can do:</p>
+
+<div class="highlight highlight-sh"><pre>sudo ./configure  --enable-R-shlib  
+sudo make  
+sudo make install  </pre></div>
+</li>
+<li><p><a href="http://rpy.sourceforge.net/rpy2.html">Rpy2</a> - python interface to R</p></li>
+<li><p><a href="http://statsmodels.sourceforge.net">statsmodels</a> - pure python module for statistical inference and much more</p></li>
+</ul>
+
+<h2>
+<a id="installation-for-mac-osxlinux---approach-1" class="anchor" href="#installation-for-mac-osxlinux---approach-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation for Mac OSX/Linux - Approach 1</h2>
+
+<p>To be followed if all the requirements above are satisfied. </p>
+
+<p>It is recommended to create a virtual python environment in your BrainSuite directory.</p>
+
+<p>For e.g., if your BrainSuite installation is located at /Applications/Brainsuite13a, and the
+unzipped bss package is located at ~/bss-0.1dev, then open the terminal and type</p>
+
+<div class="highlight highlight-sh"><pre>virtualenv --system-site-packages /Applications/Brainsuite13a/bssenv
+/Applications/Brainsuite13a/bssenv/bin/python <span class="pl-k">~</span>/bss-0.1dev/setup.py install</pre></div>
+
+<h2>
+<a id="installation-for-mac-osxlinux----approach-2" class="anchor" href="#installation-for-mac-osxlinux----approach-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation for Mac OSX/Linux  - Approach 2</h2>
+
+<blockquote>
+<h4>
+<a id="to-be-developed" class="anchor" href="#to-be-developed" aria-hidden="true"><span class="octicon octicon-link"></span></a><strong>To be developed.</strong>
+</h4>
+</blockquote>
+
+<p>Bootstrap everything. Start with a basic python installation</p>
+
+<p>Create a virtualenv in the BrainSuite directory</p>
+
+<p>Install all the packages in virtualenv</p>
+
+<p>Install the bss package in virtualenv</p>
+
+<h2>
+<a id="example-for-running-anova-for-model-comparison" class="anchor" href="#example-for-running-anova-for-model-comparison" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example for running ANOVA for model comparison</h2>
+
+<p>The source package includes a test directory with sample data. Assuming the unzipped source directory is located at: ~/bmapdev-bss, open the file</p>
+
+<div class="highlight highlight-sh"><pre><span class="pl-k">~</span>/bmapdev-bss/bss/test/data/sample1/modelspec.ini</pre></div>
+
+<p>and change the respective paths for the variables</p>
+
+<div class="highlight highlight-sh"><pre>subjectdir, demographics, phenotype_attribute_matrix, atlas_surface</pre></div>
+
+<p>to correspond to the paths on your file system. 
+Then type,</p>
+
+<div class="highlight highlight-sh"><pre>/Applications/Brainsuite13a/bssenv/bin/bss_model.py -modelspec
+<span class="pl-k">~</span>/bmapdev-bss/bss/test/data/sample1/modelspec.ini -outdir <span class="pl-k">~</span>/ -statsengine R</pre></div>
+
+<hr>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://brainsuite.org">BrainSuite</a>/MIT</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bss maintained by <a href="https://github.com/shjoshi-dev">shjoshi-dev</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
